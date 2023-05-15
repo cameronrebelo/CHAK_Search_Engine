@@ -1,12 +1,18 @@
-from flask import Flask, jsonify, request
-from urllib.request import urlopen
 import json
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, url_for, flash, redirect
 from urllib.request import urlopen
+
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/',methods=['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        search_input = request.form['search-input']
+        if not search_input:
+            flash('Title is required!')
+        else:    
+            return redirect(url_for('index'))
+
     return render_template('solr.html')
 
 @app.route('/query')
@@ -23,7 +29,6 @@ def get_solr_data():
     documents = [document.get('title','')
                  for document in response['response']['docs']]
     result = {
-        'query' : query_param,
         'num_found': num_found,
         'documents': documents
     }

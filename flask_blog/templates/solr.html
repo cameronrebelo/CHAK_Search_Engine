@@ -7,62 +7,15 @@
     </style>
   </head>
   <body>
-    <form id="search-form">
+    <form method="post">
       <input
         type="text"
-        id="search-input"
+        name="search-input"
         placeholder="Enter your search query"
+        value="{{ request.form['search-input'] }}"></input>
       />
       <button type="submit">Search</button>
     </form>
     <div id="search-results"></div>
-
-    <script>
-      // Event listener for the search form submission
-      document
-        .getElementById("sSearch-form")
-        .addEventListener("submit", function (event) {
-          event.preventDefault(); // Prevent form submission
-
-          const searchQuery = document.getElementById("search-input").value;
-
-          // Construct the Solr search URL
-          //   const solrUrl =
-          //     "http://localhost:8983/solr/rice_and_friends/select?q=" +
-          //     encodeURIComponent(searchQuery);
-
-          const solrUrl =
-            "http://localhost:8983/solr/#/rice_and_friends/select?q=" +
-            encodeURIComponent(searchQuery);
-
-          // Make the HTTP request to Solr
-          fetch(solrUrl)
-            .then((response) => response.json()) // Parse the response as JSON
-            .then((data) => {
-              // Process the search results and display them
-              const searchResults = data.response.docs;
-              const searchResultsContainer =
-                document.getElementById("search-results");
-              searchResultsContainer.innerHTML = ""; // Clear previous results
-
-              searchResults.forEach((result) => {
-                // Create HTML elements to display each search result
-                const resultContainer = document.createElement("div");
-                const titleElement = document.createElement("h3");
-                titleElement.textContent = result.title; // Adjust property name as per your Solr schema
-                const contentElement = document.createElement("p");
-                contentElement.textContent = result.content; // Adjust property name as per your Solr schema
-
-                resultContainer.appendChild(titleElement);
-                resultContainer.appendChild(contentElement);
-
-                searchResultsContainer.appendChild(resultContainer);
-              });
-            })
-            .catch((error) => {
-              console.error("Error fetching search results:", error);
-            });
-        });
-    </script>
   </body>
 </html>
