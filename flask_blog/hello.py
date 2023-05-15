@@ -11,7 +11,7 @@ def index():
         if not search_input:
             flash('Title is required!')
         else:    
-            return redirect(url_for('index'))
+            return redirect(url_for('get_solr_data')+"?query="+search_input)
 
     return render_template('solr.html')
 
